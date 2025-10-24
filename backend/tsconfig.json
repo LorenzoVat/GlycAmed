@@ -13,7 +13,19 @@
     "rootDir": "./src",                
     "outDir": "./dist",                
 
-    "sourceMap": true                  
+    "sourceMap": true,
+    
+    "baseUrl": "./src",
+    "paths": {
+      "@models/*": ["models/*"],
+      "@controllers/*": ["controllers/*"],
+      "@services/*": ["services/*"],
+      "@routes/*": ["routes/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@utils/*": ["utils/*"],
+      "@types/*": ["types/*"],
+      "@validation/*": ["validation/*"]
+    }
   },
   "include": [
     "src/**/*"                         
