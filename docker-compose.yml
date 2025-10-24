@@ -1,0 +1,57 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: glycamed-mongo-dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data-dev:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    networks:
+      - glycamed-net-dev
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    container_name: glycamed-backend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mongodb://${MONGO_USER}:${MONGO_PASS}@mongo:27017/glycamed?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      BACKEND_PORT: ${BACKEND_PORT}
+    volumes:
+      - ./backend:/app 
+      - /app/node_modules 
+    networks:
+      - glycamed-net-dev
+    depends_on:
+      - mongo
+    command: npm run dev
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: glycamed-frontend-dev
+    ports:
+      - "8080:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - glycamed-net-dev
+    depends_on:
+      - backend
+    command: npm run dev
+    restart: unless-stopped
+
+networks:
+  glycamed-net-dev:
+    driver: bridge
+
+volumes:
+  mongo-data-dev:
