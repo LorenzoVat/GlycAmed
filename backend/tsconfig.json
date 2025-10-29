@@ -25,7 +25,8 @@
       "@utils/*": ["utils/*"],
       "@types/*": ["types/*"],
       "@validation/*": ["validation/*"]
-    }
+    },
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
   "include": [
     "src/**/*"                         
