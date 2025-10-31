@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductService } from '@services/productService';
-import { SearchDTO, OpenFoodFactsDTO } from '@types/productType';
+import { SearchDTO } from '@types/productType';
 
 export class ProductController {
 
