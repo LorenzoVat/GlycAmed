@@ -20,3 +20,12 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     next();
   });
 };
+
+export const adminMiddleware =  (req: Request, res: Response, next: NextFunction) => {
+  authMiddleware(req, res, () => {
+    if (req.user?.role !== 'amed') {
+      return res.status(403).json({ error: 'Accès interdit' });
+    }
+    next();
+  });
+};

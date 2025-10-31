@@ -1,11 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { authMiddleware } from '@middlewares/authMiddleware';
+import { adminMiddleware } from '@middlewares/authMiddleware';
 import { DashboardController } from '@controllers/dashboardController';
 
 const router = Router();
 const controller = new DashboardController();
 
+router.use(adminMiddleware);
+
 // Statistiques quotidiennes
-router.get('/', authMiddleware, (req: Request, res: Response) => controller.getDashboard(req, res));
+router.get('/', (req: Request, res: Response) => controller.getDashboard(req, res));
 
 export default router;
