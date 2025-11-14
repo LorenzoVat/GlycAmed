@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
 import { DashboardService } from '@services/dashboardService';
 import { DashboardDTO } from '@types/dashboardType';
-import { getHealthOMSStatus } from '@utils/health';
-
-const dashboardService = new DashboardService();
+import { getHealthFlags } from '@utils/health';
 
 export class DashboardController {
+  private readonly dashboardService: DashboardService;
+
+  constructor() {
+    this.dashboardService = new DashboardService();
+  }
+
   async getDashboard(req: Request, res: Response) {
     try {
-      const stats = await dashboardService.getDailyStats();
-      const status = getHealthOMSStatus(stats.sugar, stats.caffeine);
+      const stats = await this.dashboardService.getDailyStats();
+      const status = getHealthFlags(stats.sugar, stats.caffeine);
 
       const response: DashboardDTO = {      
         totals: {

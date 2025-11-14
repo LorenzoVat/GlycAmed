@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { UserModel } from '@models/User';
-import { RegisterUserDTO, LoginUserDTO } from '@types/userType';
+import { RegisterUserDTO, LoginUserDTO, UpdateUserDTO } from '@types/userType';
 
 export class UserService {
   async register(data: RegisterUserDTO) {
@@ -16,7 +16,7 @@ export class UserService {
       password: hashedPassword,
     });
 
-    return newUser;
+    return { _id: newUser._id, role: newUser.role };;
   }
 
   async login(data: LoginUserDTO) {
@@ -27,10 +27,34 @@ export class UserService {
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) throw new Error('Invalid credentials');
 
-    return user;
+    return { _id: user._id, role: user.role };
   }
 
   async findUserByEmail(email: string) {
     return UserModel.findOne({ email });
+  }
+
+  async getProfile(userId: string) {
+    const user = await UserModel.findById(userId).select("-password");
+    if (!user) throw new Error("User not found");
+
+    return { firstName: user.firstName, lastName: user.lastName, email: user.email };
+  }
+
+  async updateProfile(userId: string, data: UpdateUserDTO) {
+    const { firstName, lastName, email } = data;
+
+    const existingEmail = await UserModel.findOne({ email, _id: { $ne: userId } });
+    if (existingEmail) throw new Error("Email already in use");
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { firstName, lastName, email },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updatedUser) throw new Error("User not found");
+
+    return { firstName: updatedUser.firstName, lastName: updatedUser.lastName, email: updatedUser.email };
   }
 }
