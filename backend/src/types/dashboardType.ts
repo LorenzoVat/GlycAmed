@@ -5,7 +5,12 @@ export interface DashboardTotalsDTO {
   contributions: number;
 }
 
+export interface healthOMSFlag {
+    isSugarOverLimit: boolean;
+    isCaffeineOverLimit: boolean;
+}
+
 export interface DashboardDTO {
   totals: DashboardTotalsDTO;
-  healthStatus: '✅ Sous les limites' | '⚠️ Limite de sucre dépassée' | '⚠️ Limite de caféine dépassée' | '🚨 Toutes les limites dépassées';
+  healthStatus: healthOMSFlag
 }

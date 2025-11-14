@@ -3,9 +3,7 @@ import jwt from 'jsonwebtoken';
 import { JwtPayloadDTO } from '@types/userType';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  console.log("Cookies reçus :", req.cookies);
   const token = req.cookies?.token;
-  console.log("Token extrait :", token);
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized access, please login' });
@@ -16,7 +14,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     req.user = decoded as JwtPayloadDTO;
-        console.log("Utilisateur décodé :", decoded);
     next();
   });
 };
