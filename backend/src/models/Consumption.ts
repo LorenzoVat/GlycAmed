@@ -11,6 +11,10 @@ const consumptionSchema = new Schema(
       type: String,
       required: true,
     },
+    productName: {
+      type: String,
+      required: true,
+    },
     quantityMl: {
       type: Number,
       required: true,
