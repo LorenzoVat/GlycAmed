@@ -22,7 +22,8 @@ export class ConsumptionController {
 
   async getAllConsumptions(req: Request, res: Response) {
     try {
-      const consumptions = await this.consumptionService.getAllConsumptions();
+      const filters = req.query;
+      const consumptions = await this.consumptionService.getAllConsumptions(filters);
       res.status(200).json(consumptions);
     } catch (error: any) {
       console.error(error);
