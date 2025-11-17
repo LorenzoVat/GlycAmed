@@ -2,8 +2,8 @@ import { ConsumptionModel } from '@models/Consumption';
 import { ConsumptionDTO } from '@types/consumptionType';
 
 export class ConsumptionService {
-  async addConsumption(contributorId: string, data: ConsumptionDTO) {
-    const consumption = await ConsumptionModel.create({
+  async addConsumption(contributorId: string, data: ConsumptionDTO): Promise<void> {
+    await ConsumptionModel.create({
       contributorId,
       barcode: data.barcode,
       quantityMl: data.quantityMl,
@@ -12,8 +12,6 @@ export class ConsumptionService {
       notes: data.notes,
       consumedAt: data.consumedAt,
     });
-
-    return consumption;
   }
 
   async getAllConsumptions() {
