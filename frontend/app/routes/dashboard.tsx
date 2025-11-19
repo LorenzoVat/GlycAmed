@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { LogOut, User as UserIcon, Activity, Zap, Flame, Users, AlertTriangle, CheckCircle, MapPin, Clock } from "lucide-react";
+import { LogOut, User as UserIcon, Activity, Zap, Flame, Users, AlertTriangle, CheckCircle, MapPin, Clock, Plus } from "lucide-react";
 import type { Route } from "./+types/dashboard";
 import { clsx } from "clsx";
 
@@ -245,6 +245,15 @@ export default function Dashboard() {
                 </ul>
             )}
         </div>
+        
+        <button
+          onClick={() => navigate("/add")}
+          className="fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-xl shadow-emerald-600/30 transition-transform hover:scale-110 active:scale-95 flex items-center justify-center group z-50 cursor-pointer"
+          title="Ajouter une consommation"
+        >
+          <Plus className="w-8 h-8" />
+        </button>
+
       </main>
     </div>
   );
