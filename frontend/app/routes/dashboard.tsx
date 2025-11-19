@@ -202,6 +202,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-slate-100 flex justify-between items-center">
                 <h3 className="font-bold text-lg text-slate-800">Fil d'actualité</h3>
+                <button onClick={() => navigate("/history")} className="text-sm text-emerald-600 font-medium hover:underline">Voir tout</button>
             </div>
             
             {history.length === 0 ? (
@@ -217,7 +218,7 @@ export default function Dashboard() {
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm text-slate-900">
                                         <span className="font-semibold text-emerald-800">{item.contributorId?.firstName}</span> a ajouté <span className="font-semibold">{item.productName}</span> {item.quantityMl}ml
-                                    </p>
+                                    </p>       
                                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
                                         <span className="flex items-center gap-1">
                                             <Clock className="w-3 h-3" />
@@ -245,7 +246,6 @@ export default function Dashboard() {
                 </ul>
             )}
         </div>
-        
         <button
           onClick={() => navigate("/add")}
           className="fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-xl shadow-emerald-600/30 transition-transform hover:scale-110 active:scale-95 flex items-center justify-center group z-50 cursor-pointer"

@@ -16,4 +16,7 @@ export default defineConfig({
       "/alert": "http://backend:3000",
     },
   },
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
 });
