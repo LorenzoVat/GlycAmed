@@ -164,7 +164,7 @@ export default function Dashboard() {
               className="text-slate-500 hover:text-red-600 transition-colors flex items-center gap-2 text-sm font-medium"
             >
               <LogOut className="w-4 h-4" />{" "}
-              <span className="hidden sm:inline">Déconnexion</span>
+              <span className="hidden sm:inline cursor-pointer">Déconnexion</span>
             </button>
           </div>
         </div>
@@ -287,7 +287,7 @@ export default function Dashboard() {
             </h3>
             <button
               onClick={() => navigate("/history")}
-              className="text-sm text-emerald-600 font-medium hover:underline"
+              className="text-sm text-emerald-600 font-medium hover:underline cursor-pointer"
             >
               Voir tout
             </button>
