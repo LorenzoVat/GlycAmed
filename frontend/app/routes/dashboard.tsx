@@ -12,6 +12,8 @@ import {
   MapPin,
   Clock,
   Plus,
+  ArrowRight,
+  PieChart,
 } from "lucide-react";
 import type { Route } from "./+types/dashboard";
 import { clsx } from "clsx";
@@ -48,11 +50,11 @@ function timeAgo(dateString: string) {
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   let interval = seconds / 31536000;
-  if (interval > 1) return `il y a ${Math.floor(interval)} ans`;
+  if (interval > 1) return `il y a ${Math.floor(interval)} an(s)`;
   interval = seconds / 2592000;
   if (interval > 1) return `il y a ${Math.floor(interval)} mois`;
   interval = seconds / 86400;
-  if (interval > 1) return `il y a ${Math.floor(interval)} jours`;
+  if (interval > 1) return `il y a ${Math.floor(interval)} j`;
   interval = seconds / 3600;
   if (interval > 1) return `il y a ${Math.floor(interval)} h`;
   interval = seconds / 60;
@@ -143,13 +145,31 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-24">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 md:pb-2">
       <nav className="bg-white border-b border-slate-200 sticky top-0 z-10 px-4 lg:px-8">
         <div className="max-w-7xl mx-auto h-16 flex justify-between items-center">
-          <div className="flex items-center gap-2 font-bold text-emerald-800 text-xl">
+          <div
+            className="flex items-center gap-2 font-bold text-emerald-800 text-xl cursor-pointer"
+            onClick={() => navigate("/dashboard")}
+          >
             <Activity className="w-6 h-6" /> GlycAmed
           </div>
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/add")}
+              className="hidden md:flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-emerald-200 mr-2 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" /> Ajouter
+            </button>
+
+            <button
+              onClick={() => navigate("/statistics")}
+              className="hidden md:flex items-center gap-2 text-slate-600 hover:text-emerald-600 transition-colors text-sm font-medium mr-2 cursor-pointer"
+              title="Voir les statistiques"
+            >
+              <PieChart className="w-5 h-5" /> Stats
+            </button>
+
             <div
               onClick={() => navigate("/profile")}
               className="hidden md:flex items-center gap-2 text-slate-600 text-sm bg-slate-100 px-3 py-1.5 rounded-full cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
@@ -159,14 +179,13 @@ export default function Dashboard() {
                 {user?.firstName} {user?.lastName}
               </span>
             </div>
+
             <button
               onClick={handleLogout}
-              className="text-slate-500 hover:text-red-600 transition-colors flex items-center gap-2 text-sm font-medium"
+              className="text-slate-500 hover:text-red-600 transition-colors flex items-center gap-2 text-sm font-medium cursor-pointer"
             >
               <LogOut className="w-4 h-4" />{" "}
-              <span className="hidden sm:inline cursor-pointer">
-                Déconnexion
-              </span>
+              <span className="hidden sm:inline">Déconnexion</span>
             </button>
           </div>
         </div>
@@ -224,9 +243,6 @@ export default function Dashboard() {
                 style={{ width: `${sugarWidth}%` }}
               ></div>
             </div>
-            <p className="text-xs text-slate-400 mt-2 text-right">
-              Max recommandé : {LIMITS.SUGAR}g/jour
-            </p>
           </div>
 
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm col-span-1 md:col-span-2 lg:col-span-1">
@@ -262,9 +278,6 @@ export default function Dashboard() {
                 style={{ width: `${caffeineWidth}%` }}
               ></div>
             </div>
-            <p className="text-xs text-slate-400 mt-2 text-right">
-              Max recommandé : {LIMITS.CAFFEINE}mg/jour
-            </p>
           </div>
 
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
@@ -274,7 +287,6 @@ export default function Dashboard() {
             <span className="text-3xl font-bold block text-slate-900">
               {stats?.totals.calories.toFixed(0)}
             </span>
-            <span className="text-xs text-slate-400">kcal cumulées</span>
           </div>
 
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
@@ -284,30 +296,30 @@ export default function Dashboard() {
             <span className="text-3xl font-bold block text-slate-900">
               {stats?.totals.contributions}
             </span>
-            <span className="text-xs text-slate-400">entrées aujourd'hui</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-0">
           <div className="p-6 border-b border-slate-100 flex justify-between items-center">
             <h3 className="font-bold text-lg text-slate-800">
-              Fil d'actualité
+              Dernières activités
             </h3>
+
             <button
-              onClick={() => navigate("/history")}
-              className="text-sm text-emerald-600 font-medium hover:underline cursor-pointer"
+              onClick={() => navigate("/add")}
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-emerald-200 cursor-pointer"
             >
-              Voir tout
+              <Plus className="w-4 h-4" /> Ajouter
             </button>
           </div>
 
           {history.length === 0 ? (
             <div className="p-12 text-center text-slate-500">
-              Aucune activité récente.
+              Aucune consommation aujourd'hui.
             </div>
           ) : (
             <ul className="divide-y divide-slate-50">
-              {history.slice(0, 5).map((item) => (
+              {history.slice(0, 4).map((item) => (
                 <li
                   key={item._id}
                   className="p-4 hover:bg-slate-50 transition-colors"
@@ -356,11 +368,22 @@ export default function Dashboard() {
               ))}
             </ul>
           )}
+
+          {history.length > 0 && (
+            <div className="p-3 bg-slate-50 border-t border-slate-100">
+              <button
+                onClick={() => navigate("/history")}
+                className="w-full py-2 text-sm text-emerald-600 font-semibold hover:bg-emerald-100 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                Voir tout l'historique <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
+
         <button
           onClick={() => navigate("/add")}
-          className="fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-xl shadow-emerald-600/30 transition-transform hover:scale-110 active:scale-95 flex items-center justify-center group z-50 cursor-pointer"
-          title="Ajouter une consommation"
+          className="md:hidden fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-xl shadow-emerald-600/30 transition-transform hover:scale-110 active:scale-95 flex items-center justify-center group z-50 cursor-pointer"
         >
           <Plus className="w-8 h-8" />
         </button>
