@@ -10,5 +10,6 @@ const consumptionController = new ConsumptionController();
 // Ajouter une consommation
 router.post('/add', authMiddleware, validate(consumptionSchema), (req: Request, res: Response) => consumptionController.addConsumption(req, res));
 router.get('/all', authMiddleware, validateQuery(consumptionQuerySchema), (req: Request, res: Response) => consumptionController.getAllConsumptions(req, res));
+router.delete('/delete/:id', authMiddleware, (req: Request, res: Response) => consumptionController.deleteConsumption(req, res));
 
 export default router;

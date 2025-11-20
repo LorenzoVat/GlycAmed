@@ -37,4 +37,12 @@ export class ConsumptionService {
       .populate('contributorId', 'firstName lastName email')
       .sort({ consumedAt: -1 });
   }
+
+  async deleteConsumption(userId: string, consumptionId: string) {
+    return ConsumptionModel.findOneAndDelete({
+      _id: consumptionId,
+      contributorId: userId,
+    });
+  }
+
 }
