@@ -22,12 +22,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-    },
-    role: {
-      type: String,
-      enum: ['student', 'amed'],
-      default: 'student',
-    },
+    }
   },
   {
     timestamps: true,
