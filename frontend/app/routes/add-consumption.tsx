@@ -37,7 +37,7 @@ export default function AddConsumption() {
     setSelectedProduct(null);
     
     try {
-      const res = await fetch(`/product/search?name=${encodeURIComponent(searchTerm)}`);
+      const res = await fetch(`/api/product/search?name=${encodeURIComponent(searchTerm)}`);
       const data = await res.json();
       if (res.ok) setResults(Array.isArray(data) ? data : [data]);
     } catch (err) {
@@ -70,7 +70,7 @@ export default function AddConsumption() {
     };
 
     try {
-      const res = await fetch("/consumption/add", {
+      const res = await fetch("/api/consumption/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

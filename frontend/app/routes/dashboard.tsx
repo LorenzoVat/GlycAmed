@@ -71,14 +71,14 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userRes = await fetch("/user/me");
+        const userRes = await fetch("/api/user/me");
         if (!userRes.ok) throw new Error("Non connecté");
         setUser(await userRes.json());
 
-        const dashRes = await fetch("/dashboard");
+        const dashRes = await fetch("/api/dashboard");
         if (dashRes.ok) setStats(await dashRes.json());
 
-        const historyRes = await fetch("/consumption/all");
+        const historyRes = await fetch("/api/consumption/all");
         if (historyRes.ok) setHistory(await historyRes.json());
       } catch (err) {
         navigate("/");
@@ -91,7 +91,7 @@ export default function Dashboard() {
   }, [navigate]);
 
   const handleLogout = async () => {
-    await fetch("/user/logout", { method: "POST" });
+    await fetch("/api/user/logout", { method: "POST" });
     navigate("/");
   };
 
