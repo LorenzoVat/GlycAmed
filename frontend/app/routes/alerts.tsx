@@ -29,7 +29,7 @@ export default function Alerts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/alert/history")
+    fetch("/api/alert/history")
       .then((res) => {
         if (res.ok) return res.json();
         return [];

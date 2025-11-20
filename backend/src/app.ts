@@ -11,12 +11,12 @@ const app: express.Application = express();
 app.use(cookieParser());
 app.use(express.json());
 
-app.get("/", (req, res) => res.send("GlycAmed backend minimal ✅"));
+app.get("/api", (req, res) => res.send("GlycAmed backend minimal ✅"));
 
-app.use("/user", userRoutes);
-app.use("/product", productRoutes);
-app.use("/consumption", consumptionRoutes);
-app.use("/dashboard", dashboardRoutes);
-app.use('/alert', alertRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/consumption", consumptionRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use('/api/alert', alertRoutes);
 
 export default app;

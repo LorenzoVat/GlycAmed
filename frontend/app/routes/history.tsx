@@ -44,7 +44,7 @@ export default function History() {
           params.append("dateTo", end.toISOString());
       }
 
-      const res = await fetch(`/consumption/all?${params.toString()}`);
+      const res = await fetch(`/api/consumption/all?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setConsumptions(data);

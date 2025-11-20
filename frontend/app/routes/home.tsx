@@ -43,7 +43,7 @@ export default function Home() {
     setIsLoading(true);
     setError(null);
 
-    const endpoint = isRegister ? "/user/register" : "/user/login";
+    const endpoint = isRegister ? "/api/user/register" : "/api/user/login";
 
     try {
       const response = await fetch(endpoint, {

@@ -30,7 +30,7 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    fetch("/user/me")
+    fetch("/api/user/me")
       .then((res) => {
         if (!res.ok) throw new Error("Non connecté");
         return res.json();
@@ -50,7 +50,7 @@ export default function Profile() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const res = await fetch("/user/me", {
+      const res = await fetch("/api/user/me", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -70,7 +70,7 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    await fetch("/user/logout", { method: "POST" });
+    await fetch("/api/user/logout", { method: "POST" });
     navigate("/");
   };
 
