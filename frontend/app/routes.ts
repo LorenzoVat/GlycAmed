@@ -7,4 +7,5 @@ export default [
   route("history", "routes/history.tsx"),
   route("profile", "routes/profile.tsx"),
   route("alerts", "routes/alerts.tsx"),
+  route("statistics", "routes/statistics.tsx"),
 ] satisfies RouteConfig;
