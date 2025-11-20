@@ -164,7 +164,9 @@ export default function Dashboard() {
               className="text-slate-500 hover:text-red-600 transition-colors flex items-center gap-2 text-sm font-medium"
             >
               <LogOut className="w-4 h-4" />{" "}
-              <span className="hidden sm:inline">Déconnexion</span>
+              <span className="hidden sm:inline cursor-pointer">
+                Déconnexion
+              </span>
             </button>
           </div>
         </div>
@@ -173,15 +175,21 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-8">
         <div
           className={clsx(
-            "rounded-2xl p-6 border flex items-start gap-4 shadow-sm",
+            "rounded-2xl p-6 border flex items-start gap-4 shadow-sm transition-all",
             statusColor
           )}
         >
           <StatusIcon className="w-8 h-8 shrink-0" />
-          <div>
+          <div className="flex-1">
             <h2 className="text-lg font-bold">{statusTitle}</h2>
             <p className="text-sm mt-1 opacity-90">{statusMessage}</p>
           </div>
+          <button
+            onClick={() => navigate("/alerts")}
+            className="text-sm font-semibold underline opacity-80 hover:opacity-100 whitespace-nowrap cursor-pointer"
+          >
+            Voir historique
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -287,7 +295,7 @@ export default function Dashboard() {
             </h3>
             <button
               onClick={() => navigate("/history")}
-              className="text-sm text-emerald-600 font-medium hover:underline"
+              className="text-sm text-emerald-600 font-medium hover:underline cursor-pointer"
             >
               Voir tout
             </button>
