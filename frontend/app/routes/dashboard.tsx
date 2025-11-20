@@ -13,6 +13,7 @@ import {
   Clock,
   Plus,
   ArrowRight,
+  Trophy,
   PieChart,
 } from "lucide-react";
 import type { Route } from "./+types/dashboard";
@@ -289,13 +290,23 @@ export default function Dashboard() {
             </span>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-4 text-slate-500 text-sm font-medium">
-              <Users className="w-4 h-4 text-blue-500" /> Contributions
+          <div
+            onClick={() => navigate("/leaderboard")}
+            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:border-blue-300 hover:shadow-md transition-all group"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
+                <Users className="w-4 h-4 text-blue-500" /> Contributions
+              </div>
+              <Trophy className="w-4 h-4 text-slate-300 group-hover:text-yellow-500 transition-colors" />
             </div>
             <span className="text-3xl font-bold block text-slate-900">
               {stats?.totals.contributions}
             </span>
+            <div className="flex items-center gap-1 text-xs text-slate-400 group-hover:text-blue-600 transition-colors font-medium mt-1">
+              Voir le classement{" "}
+              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+            </div>
           </div>
         </div>
 
