@@ -16,7 +16,7 @@ export class UserService {
       password: hashedPassword,
     });
 
-    return { _id: newUser._id, role: newUser.role };;
+    return { _id: newUser._id };;
   }
 
   async login(data: LoginUserDTO) {
@@ -27,7 +27,7 @@ export class UserService {
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) throw new Error('Invalid credentials');
 
-    return { _id: user._id, role: user.role };
+    return { _id: user._id };
   }
 
   async findUserByEmail(email: string) {

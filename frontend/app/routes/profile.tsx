@@ -193,9 +193,6 @@ export default function Profile() {
                     <h2 className="text-2xl font-bold text-slate-900">
                       {user.firstName} {user.lastName}
                     </h2>
-                    <p className="text-emerald-600 font-medium">
-                      {user.role === "amed" ? "Administrateur" : "Étudiant"}
-                    </p>
                   </div>
 
                   <div className="space-y-4">
@@ -220,9 +217,6 @@ export default function Profile() {
                       <div>
                         <p className="text-xs text-slate-500 uppercase font-semibold tracking-wider">
                           Rôle système
-                        </p>
-                        <p className="text-slate-900 font-medium capitalize">
-                          {user.role || "Utilisateur"}
                         </p>
                       </div>
                     </div>

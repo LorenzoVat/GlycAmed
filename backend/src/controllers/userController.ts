@@ -16,7 +16,7 @@ export class UserController {
 
       const user = await this.userService.register(userDto);
 
-      const token = generateToken(user._id, user.role);
+      const token = generateToken(user._id);
 
       res
       .cookie('token', token, {
@@ -26,7 +26,7 @@ export class UserController {
         maxAge: 1000 * 60 * 60 * 24
       })
       .status(201)
-      .json({ message: 'User successfully created ', user: { userId: user._id, role: user.role } });
+      .json({ message: 'User successfully created ', user: { userId: user._id } });
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
@@ -38,7 +38,7 @@ export class UserController {
 
         const user = await this.userService.login(userDto);
 
-        const token = generateToken(user._id, user.role);
+        const token = generateToken(user._id);
 
         res
         .cookie('token', token, {
@@ -48,7 +48,7 @@ export class UserController {
             maxAge: 1000 * 60 * 60 * 24
         })
         .status(201)
-        .json({ message: 'User successfully login ', user: { userId: user._id, role: user.role } });
+        .json({ message: 'User successfully login ', user: { userId: user._id } });
     } catch (error: any) {
         res.status(401).json({ error: error.message });
     }

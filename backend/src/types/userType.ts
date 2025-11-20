@@ -12,7 +12,6 @@ export interface LoginUserDTO {
 
 export interface JwtPayloadDTO {
   userId: string;
-  role: string;
 }
 
 export interface UpdateUserDTO {
