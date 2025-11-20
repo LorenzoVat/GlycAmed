@@ -209,17 +209,6 @@ export default function Profile() {
                         </p>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition-colors group">
-                      <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-sm text-slate-400 group-hover:text-emerald-500 transition-colors">
-                        <Shield className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 uppercase font-semibold tracking-wider">
-                          Rôle système
-                        </p>
-                      </div>
-                    </div>
                   </div>
 
                   <button
