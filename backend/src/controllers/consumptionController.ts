@@ -47,4 +47,21 @@ export class ConsumptionController {
       return res.status(500).json({ message: error.message });
     }
   }
+
+  async updateConsumption(req: Request, res: Response) {
+    try {
+      const userId = req.user!.userId;
+      const consumptionId = req.params.id;
+      const updated = await this.consumptionService.updateConsumption(userId, consumptionId, req.body);
+
+      if (!updated) {
+        return res.status(404).json({ message: "Consumption not found or not authorized" });
+      }
+
+      return res.status(200).json({message: "Consumption successfully updated"});
+    } catch (error: any) {
+      console.error(error);
+      return res.status(500).json({ message: error.message });
+    }
+  }
 };

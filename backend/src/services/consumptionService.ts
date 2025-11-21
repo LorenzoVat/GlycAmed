@@ -45,4 +45,19 @@ export class ConsumptionService {
     });
   }
 
+  async updateConsumption(userId: string, consumptionId: string, data: ConsumptionDTO) {
+    return ConsumptionModel.findOneAndUpdate(
+      { _id: consumptionId, contributorId: userId },
+      {
+        barcode: data.barcode,
+        productName: data.productName,
+        quantityMl: data.quantityMl,
+        nutrients: data.nutrients,
+        location: data.location,
+        notes: data.notes,
+        consumedAt: data.consumedAt
+      },
+      { new: true }
+    );
+  } 
 }
