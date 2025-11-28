@@ -23,7 +23,7 @@ La méthode la plus simple pour lancer l'application est d'utiliser Docker Compo
 1. Clonez le dépôt :
 
    ```bash
-   git clone <votre-repo-url>
+   git clone <https://github.com/LorenzoVat/GlycAmed>
    cd Glycamed
    ```
 
