@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useApi } from "~/hooks/useApi";
+import { useUser } from "~/context/UserContext";
 import { CONFIG } from "~/config/constants";
 import { useNavigate } from "react-router";
 import {
@@ -63,14 +65,10 @@ function timeAgo(dateString: string) {
   return "à l'instant";
 }
 
-import { useApi } from "~/hooks/useApi";
-
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user, loading: userLoading, logout } = useUser();
 
-  const { data: user, loading: userLoading } = useApi<any>("/api/user/me", {
-    immediate: true,
-  });
   const { data: stats, loading: statsLoading } = useApi<DashboardData>(
     "/api/dashboard",
     { immediate: true }
@@ -90,8 +88,7 @@ export default function Dashboard() {
   }, [user, userLoading, navigate]);
 
   const handleLogout = async () => {
-    await fetch("/api/user/logout", { method: "POST" });
-    navigate("/");
+    await logout();
   };
 
   if (loading)

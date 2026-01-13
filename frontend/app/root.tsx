@@ -42,8 +42,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { UserProvider } from "~/context/UserContext";
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <UserProvider>
+      <Outlet />
+    </UserProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApi } from "~/hooks/useApi";
+import { useUser } from "~/context/UserContext";
 import { useNavigate } from "react-router";
 import {
   ArrowLeft,
@@ -36,7 +37,7 @@ interface Consumption {
 export default function History() {
   const navigate = useNavigate();
 
-  const { data: user } = useApi<any>("/api/user/me", { immediate: true });
+  const { user } = useUser();
 
   const {
     data: remoteConsumptions,
@@ -45,8 +46,7 @@ export default function History() {
     setData: setConsumptions,
   } = useApi<Consumption[]>();
 
-  // Ensure consumptions is an array (remoteConsumptions can be null initially)
-  const consumptions = remoteConsumptions || [];
+   const consumptions = remoteConsumptions || [];
 
   const [productFilter, setProductFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
