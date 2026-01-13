@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router";
+import { useEffect, useState } from "react";
+import { CONFIG } from "~/config/constants";
 
 export default function Report() {
   const [period, setPeriod] = useState("week");
@@ -32,8 +34,8 @@ export default function Report() {
     );
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 50) return "text-orange-500";
+    if (score >= CONFIG.SCORING.GOOD) return "text-green-500";
+    if (score >= CONFIG.SCORING.MEDIUM) return "text-orange-500";
     return "text-red-500";
   };
 
@@ -76,14 +78,18 @@ export default function Report() {
           <p className="text-2xl font-bold mt-1">
             {report.summary.averageSugar}g
           </p>
-          <p className="text-xs text-gray-400 mt-2">Max recommandé: 50g</p>
+          <p className="text-xs text-gray-400 mt-2">
+            Max recommandé: {CONFIG.HEALTH_LIMITS.SUGAR}g
+          </p>
         </div>
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-gray-500 text-sm">Moyenne Caféine / jour</h3>
           <p className="text-2xl font-bold mt-1">
             {report.summary.averageCaffeine}mg
           </p>
-          <p className="text-xs text-gray-400 mt-2">Max recommandé: 400mg</p>
+          <p className="text-xs text-gray-400 mt-2">
+            Max recommandé: {CONFIG.HEALTH_LIMITS.CAFFEINE}mg
+          </p>
         </div>
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-gray-500 text-sm">Tendance</h3>

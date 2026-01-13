@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import {
-  ArrowLeft,
   AlertTriangle,
-  Calendar,
-  Droplets,
+  CheckCircle,
+  X,
+  Bell,
   Zap,
+  Droplets,
 } from "lucide-react";
+import { CONFIG } from "~/config/constants";
 import type { Route } from "./+types/alerts";
 import { clsx } from "clsx";
 
@@ -132,7 +134,9 @@ export default function Alerts() {
                     <span className="font-semibold">
                       {alert.sugarTotal.toFixed(1)}g
                     </span>
-                    <span className="text-xs text-slate-500">/ 50g</span>
+                    <span className="text-xs text-slate-500">
+                      / {CONFIG.HEALTH_LIMITS.SUGAR}g
+                    </span>
                   </div>
 
                   <div
@@ -147,7 +151,9 @@ export default function Alerts() {
                     <span className="font-semibold">
                       {alert.caffeineTotal}mg
                     </span>
-                    <span className="text-xs text-slate-500">/ 400mg</span>
+                    <span className="text-xs text-slate-500">
+                      / {CONFIG.HEALTH_LIMITS.CAFFEINE}mg
+                    </span>
                   </div>
                 </div>
               </div>

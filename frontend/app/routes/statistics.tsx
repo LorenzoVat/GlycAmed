@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { CONFIG } from "~/config/constants";
 import { useNavigate } from "react-router";
 import {
   ArrowLeft,
@@ -137,7 +138,11 @@ export default function Statistics() {
     Array.from(dailyMap.values()).forEach((day) => {
       totalSugar += day.sugar;
       totalCaffeine += day.caffeine;
-      if (day.sugar > 50 || day.caffeine > 400) daysOverLimit++;
+      if (
+        day.sugar > CONFIG.HEALTH_LIMITS.SUGAR ||
+        day.caffeine > CONFIG.HEALTH_LIMITS.CAFFEINE
+      )
+        daysOverLimit++;
     });
 
     const sorted = [...data].sort(
@@ -262,7 +267,9 @@ export default function Statistics() {
       avgSugar: (totalSugar / daysCount).toFixed(1),
       avgCaffeine: (totalCaffeine / daysCount).toFixed(0),
       daysOverLimit: Array.from(dailyMap.values()).filter(
-        (d) => d.sugar > 50 || d.caffeine > 400
+        (d) =>
+          d.sugar > CONFIG.HEALTH_LIMITS.SUGAR ||
+          d.caffeine > CONFIG.HEALTH_LIMITS.CAFFEINE
       ).length,
       topLocation:
         Array.from(locationMap.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ||
@@ -442,7 +449,7 @@ export default function Statistics() {
                   {report.summary.averageCaffeine}mg
                 </p>
                 <p className="text-xs text-gray-400 mt-2">
-                  Max recommandé: 400mg
+                  Max recommandé: {CONFIG.HEALTH_LIMITS.CAFFEINE}mg
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-md border border-slate-100">
@@ -643,7 +650,7 @@ export default function Statistics() {
                         contentStyle={{ borderRadius: "8px", fontSize: "14px" }}
                       />
                       <ReferenceLine
-                        y={400}
+                        y={CONFIG.HEALTH_LIMITS.CAFFEINE}
                         stroke="#ef4444"
                         strokeDasharray="3 3"
                       />

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { CONFIG } from "~/config/constants";
 import { useNavigate } from "react-router";
 import {
   LogOut,
@@ -22,8 +23,6 @@ import { clsx } from "clsx";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Dashboard - GlycAmed" }];
 }
-
-const LIMITS = { SUGAR: 50, CAFFEINE: 400 };
 
 interface DashboardData {
   totals: {
@@ -107,9 +106,12 @@ export default function Dashboard() {
 
   const sugarCurrent = stats?.totals.sugar || 0;
   const caffeineCurrent = stats?.totals.caffeine || 0;
-  const sugarWidth = Math.min((sugarCurrent / LIMITS.SUGAR) * 100, 100);
+  const sugarWidth = Math.min(
+    (sugarCurrent / CONFIG.HEALTH_LIMITS.SUGAR) * 100,
+    100
+  );
   const caffeineWidth = Math.min(
-    (caffeineCurrent / LIMITS.CAFFEINE) * 100,
+    (caffeineCurrent / CONFIG.HEALTH_LIMITS.CAFFEINE) * 100,
     100
   );
 
@@ -233,13 +235,15 @@ export default function Dashboard() {
               >
                 {sugarCurrent.toFixed(1)}
               </span>
-              <span className="text-slate-400 text-sm">/ {LIMITS.SUGAR}g</span>
+              <span className="text-slate-400 text-sm">
+                / {CONFIG.HEALTH_LIMITS.SUGAR}g
+              </span>
             </div>
             <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
               <div
                 className={clsx(
                   "h-full rounded-full transition-all duration-700 ease-out",
-                  getBarColor(sugarCurrent, LIMITS.SUGAR)
+                  getBarColor(sugarCurrent, CONFIG.HEALTH_LIMITS.SUGAR)
                 )}
                 style={{ width: `${sugarWidth}%` }}
               ></div>
@@ -267,14 +271,14 @@ export default function Dashboard() {
                 {caffeineCurrent.toFixed(0)}
               </span>
               <span className="text-slate-400 text-sm">
-                / {LIMITS.CAFFEINE}mg
+                / {CONFIG.HEALTH_LIMITS.CAFFEINE}mg
               </span>
             </div>
             <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
               <div
                 className={clsx(
                   "h-full rounded-full transition-all duration-700 ease-out",
-                  getBarColor(caffeineCurrent, LIMITS.CAFFEINE)
+                  getBarColor(caffeineCurrent, CONFIG.HEALTH_LIMITS.CAFFEINE)
                 )}
                 style={{ width: `${caffeineWidth}%` }}
               ></div>
