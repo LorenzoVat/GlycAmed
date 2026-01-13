@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUser } from "~/context/UserContext";
 import type { Route } from "./+types/home";
 import { useNavigate } from "react-router";
 import {
@@ -25,6 +26,7 @@ export default function Home() {
   const [isRegister, setIsRegister] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { login, register } = useUser();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -42,33 +44,23 @@ export default function Home() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
-    const endpoint = isRegister ? "/api/user/register" : "/api/user/login";
-
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        const specificError = data.errors?.message;
-        const globalError = data.message || data.error;
-        throw new Error(
-          specificError || globalError || "Une erreur est survenue"
-        );
-      }
-
-      navigate("/dashboard");
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+    let result;
+    if (isRegister) {
+      result = await register(
+        formData.email,
+        formData.password,
+        formData.firstName,
+        formData.lastName
+      );
+    } else {
+      result = await login(formData.email, formData.password);
     }
+    if (result.success) {
+      navigate("/dashboard");
+    } else {
+      setError(result.error || "Une erreur est survenue");
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -145,7 +137,7 @@ export default function Home() {
             </div>
           )}
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit} method="post">
             {isRegister && (
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
