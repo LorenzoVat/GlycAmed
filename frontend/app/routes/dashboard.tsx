@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useApi } from "~/hooks/useApi";
 import { useUser } from "~/context/UserContext";
+import { Navbar } from "~/components/Navbar";
+import { StatCard } from "~/components/StatCard";
+import { Badge } from "~/components/Badge";
 import { CONFIG } from "~/config/constants";
 import { useNavigate } from "react-router";
 import {
-  LogOut,
   User as UserIcon,
   Activity,
   Zap,
@@ -100,20 +102,6 @@ export default function Dashboard() {
 
   const sugarCurrent = stats?.totals.sugar || 0;
   const caffeineCurrent = stats?.totals.caffeine || 0;
-  const sugarWidth = Math.min(
-    (sugarCurrent / CONFIG.HEALTH_LIMITS.SUGAR) * 100,
-    100
-  );
-  const caffeineWidth = Math.min(
-    (caffeineCurrent / CONFIG.HEALTH_LIMITS.CAFFEINE) * 100,
-    100
-  );
-
-  const getBarColor = (current: number, max: number) => {
-    if (current > max) return "bg-red-500";
-    if (current > max * 0.75) return "bg-orange-400";
-    return "bg-emerald-500";
-  };
 
   const isSugarOver = stats?.healthStatus.isSugarOverLimit;
   const isCaffeineOver = stats?.healthStatus.isCaffeineOverLimit;
@@ -143,50 +131,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 md:pb-2">
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-10 px-4 lg:px-8">
-        <div className="max-w-7xl mx-auto h-16 flex justify-between items-center">
-          <div
-            className="flex items-center gap-2 font-bold text-emerald-800 text-xl cursor-pointer"
-            onClick={() => navigate("/dashboard")}
-          >
-            <Activity className="w-6 h-6" /> GlycAmed
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/add")}
-              className="hidden md:flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-emerald-200 mr-2 cursor-pointer"
-            >
-              <Plus className="w-4 h-4" /> Ajouter
-            </button>
-
-            <button
-              onClick={() => navigate("/statistics")}
-              className="hidden md:flex items-center gap-2 text-slate-600 hover:text-emerald-600 transition-colors text-sm font-medium mr-2 cursor-pointer"
-              title="Voir les statistiques"
-            >
-              <PieChart className="w-5 h-5" /> Stats
-            </button>
-
-            <div
-              onClick={() => navigate("/profile")}
-              className="hidden md:flex items-center gap-2 text-slate-600 text-sm bg-slate-100 px-3 py-1.5 rounded-full cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
-            >
-              <UserIcon className="w-4 h-4 text-emerald-700" />
-              <span className="font-medium">
-                {user?.firstName} {user?.lastName}
-              </span>
-            </div>
-
-            <button
-              onClick={handleLogout}
-              className="text-slate-500 hover:text-red-600 transition-colors flex items-center gap-2 text-sm font-medium cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" />{" "}
-              <span className="hidden sm:inline">Déconnexion</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-8">
         <div
@@ -209,103 +154,42 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm col-span-1 md:col-span-2 lg:col-span-1">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
-                <Zap className="w-4 h-4 text-pink-500" /> Sucre
-              </div>
-              {isSugarOver && (
-                <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold animate-pulse">
-                  DANGER
-                </span>
-              )}
-            </div>
-            <div className="flex items-baseline gap-1 mb-2">
-              <span
-                className={clsx(
-                  "text-3xl font-bold",
-                  isSugarOver ? "text-red-600" : "text-slate-900"
-                )}
-              >
-                {sugarCurrent.toFixed(1)}
-              </span>
-              <span className="text-slate-400 text-sm">
-                / {CONFIG.HEALTH_LIMITS.SUGAR}g
-              </span>
-            </div>
-            <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-              <div
-                className={clsx(
-                  "h-full rounded-full transition-all duration-700 ease-out",
-                  getBarColor(sugarCurrent, CONFIG.HEALTH_LIMITS.SUGAR)
-                )}
-                style={{ width: `${sugarWidth}%` }}
-              ></div>
-            </div>
-          </div>
+          <StatCard
+            label="Sucre"
+            value={sugarCurrent}
+            icon={Zap}
+            iconColor="text-pink-500"
+            unit="g"
+            limit={CONFIG.HEALTH_LIMITS.SUGAR}
+            isOverLimit={isSugarOver}
+          />
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm col-span-1 md:col-span-2 lg:col-span-1">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
-                <Activity className="w-4 h-4 text-purple-500" /> Caféine
-              </div>
-              {isCaffeineOver && (
-                <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold animate-pulse">
-                  DANGER
-                </span>
-              )}
-            </div>
-            <div className="flex items-baseline gap-1 mb-2">
-              <span
-                className={clsx(
-                  "text-3xl font-bold",
-                  isCaffeineOver ? "text-red-600" : "text-slate-900"
-                )}
-              >
-                {caffeineCurrent.toFixed(0)}
-              </span>
-              <span className="text-slate-400 text-sm">
-                / {CONFIG.HEALTH_LIMITS.CAFFEINE}mg
-              </span>
-            </div>
-            <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-              <div
-                className={clsx(
-                  "h-full rounded-full transition-all duration-700 ease-out",
-                  getBarColor(caffeineCurrent, CONFIG.HEALTH_LIMITS.CAFFEINE)
-                )}
-                style={{ width: `${caffeineWidth}%` }}
-              ></div>
-            </div>
-          </div>
+          <StatCard
+            label="Caféine"
+            value={caffeineCurrent}
+            icon={Activity}
+            iconColor="text-purple-500"
+            unit="mg"
+            limit={CONFIG.HEALTH_LIMITS.CAFFEINE}
+            isOverLimit={isCaffeineOver}
+          />
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-4 text-slate-500 text-sm font-medium">
-              <Flame className="w-4 h-4 text-orange-500" /> Calories
-            </div>
-            <span className="text-3xl font-bold block text-slate-900">
-              {stats?.totals.calories.toFixed(0)}
-            </span>
-          </div>
+          <StatCard
+            label="Calories"
+            value={stats?.totals.calories || 0}
+            icon={Flame}
+            iconColor="text-orange-500"
+            type="simple"
+          />
 
-          <div
+          <StatCard
+            label="Contributions"
+            value={stats?.totals.contributions || 0}
+            icon={Users}
+            iconColor="text-blue-500"
+            type="interactive"
             onClick={() => navigate("/leaderboard")}
-            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:border-blue-300 hover:shadow-md transition-all group"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
-                <Users className="w-4 h-4 text-blue-500" /> Contributions
-              </div>
-              <Trophy className="w-4 h-4 text-slate-300 group-hover:text-yellow-500 transition-colors" />
-            </div>
-            <span className="text-3xl font-bold block text-slate-900">
-              {stats?.totals.contributions}
-            </span>
-            <div className="flex items-center gap-1 text-xs text-slate-400 group-hover:text-blue-600 transition-colors font-medium mt-1">
-              Voir le classement{" "}
-              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-            </div>
-          </div>
+          />
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-0">
@@ -361,16 +245,12 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <span
-                        className={clsx(
-                          "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                          item.nutrients.sugar > 20
-                            ? "bg-red-100 text-red-800"
-                            : "bg-slate-100 text-slate-800"
-                        )}
-                      >
-                        +{item.nutrients.sugar}g sucre
-                      </span>
+                      <Badge
+                        label={`+${item.nutrients.sugar}g sucre`}
+                        variant={
+                          item.nutrients.sugar > 20 ? "bg-red" : "bg-slate"
+                        }
+                      />
                     </div>
                   </div>
                 </li>
