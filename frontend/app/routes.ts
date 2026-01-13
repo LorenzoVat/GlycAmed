@@ -9,4 +9,6 @@ export default [
   route("alerts", "routes/alerts.tsx"),
   route("statistics", "routes/statistics.tsx"),
   route("leaderboard", "routes/leaderboard.tsx"),
+  route("/sentry-example-page", "routes/sentry-example-page.tsx"),
+  route("/api/sentry-example-api", "routes/api.sentry-example-api.ts")
 ] satisfies RouteConfig;

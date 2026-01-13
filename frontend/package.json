@@ -4,13 +4,15 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "vite --host 0.0.0.0",
-    "start": "react-router-serve ./build/server/index.js",
+    "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' vite --host 0.0.0.0",
+    "start": "NODE_OPTIONS='--import ./instrument.server.mjs' react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
+    "@sentry/profiling-node": "^10.33.0",
+    "@sentry/react-router": "^10.33.0",
     "clsx": "^2.1.1",
     "isbot": "^5.1.31",
     "lucide-react": "^0.554.0",
@@ -21,6 +23,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@react-router/dev": "^7.9.2",
     "@tailwindcss/vite": "^4.1.13",
     "@types/node": "^22.19.1",
