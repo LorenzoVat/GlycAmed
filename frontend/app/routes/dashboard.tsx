@@ -63,34 +63,31 @@ function timeAgo(dateString: string) {
   return "à l'instant";
 }
 
+import { useApi } from "~/hooks/useApi";
+
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [stats, setStats] = useState<DashboardData | null>(null);
-  const [history, setHistory] = useState<Consumption[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data: user, loading: userLoading } = useApi<any>("/api/user/me", {
+    immediate: true,
+  });
+  const { data: stats, loading: statsLoading } = useApi<DashboardData>(
+    "/api/dashboard",
+    { immediate: true }
+  );
+  const { data: historyData, loading: historyLoading } = useApi<Consumption[]>(
+    "/api/consumption/all",
+    { immediate: true }
+  );
+  const history = historyData || [];
+
+  const loading = userLoading || statsLoading || historyLoading;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userRes = await fetch("/api/user/me");
-        if (!userRes.ok) throw new Error("Non connecté");
-        setUser(await userRes.json());
-
-        const dashRes = await fetch("/api/dashboard");
-        if (dashRes.ok) setStats(await dashRes.json());
-
-        const historyRes = await fetch("/api/consumption/all");
-        if (historyRes.ok) setHistory(await historyRes.json());
-      } catch (err) {
-        navigate("/");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
+    if (!userLoading && !user) {
+      navigate("/");
+    }
+  }, [user, userLoading, navigate]);
 
   const handleLogout = async () => {
     await fetch("/api/user/logout", { method: "POST" });

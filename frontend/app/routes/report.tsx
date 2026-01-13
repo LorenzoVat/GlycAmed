@@ -1,30 +1,14 @@
-import { useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useApi } from "~/hooks/useApi";
 import { CONFIG } from "~/config/constants";
 
 export default function Report() {
   const [period, setPeriod] = useState("week");
-  const [report, setReport] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { data: report, loading, execute } = useApi<any>();
 
   useEffect(() => {
-    fetchReport(period);
-  }, [period]);
-
-  const fetchReport = async (selectedPeriod: string) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/reports?period=${selectedPeriod}`);
-      if (res.ok) {
-        const data = await res.json();
-        setReport(data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch report", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    execute(`/api/reports?period=${period}`);
+  }, [period, execute]);
 
   if (loading)
     return <div className="p-8 text-center">Génération du rapport...</div>;
@@ -106,7 +90,7 @@ export default function Report() {
         <section className="bg-white p-6 rounded-xl shadow-md">
           <h2 className="text-xl font-bold mb-4">🏆 Top Produits</h2>
           <ul className="space-y-3">
-            {report.topProducts.map((product, index) => (
+            {report.topProducts.map((product: any, index: number) => (
               <li
                 key={index}
                 className="flex justify-between items-center p-2 hover:bg-gray-50 rounded"
@@ -128,7 +112,7 @@ export default function Report() {
         <section className="bg-white p-6 rounded-xl shadow-md">
           <h2 className="text-xl font-bold mb-4">👥 Top Contributeurs</h2>
           <ul className="space-y-3">
-            {report.topContributors.map((contributor, index) => (
+            {report.topContributors.map((contributor: any, index: number) => (
               <li
                 key={index}
                 className="flex justify-between items-center p-2 hover:bg-gray-50 rounded"

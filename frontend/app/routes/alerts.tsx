@@ -7,6 +7,8 @@ import {
   Bell,
   Zap,
   Droplets,
+  ArrowLeft,
+  Calendar,
 } from "lucide-react";
 import { CONFIG } from "~/config/constants";
 import type { Route } from "./+types/alerts";
@@ -25,26 +27,16 @@ interface Alert {
   triggeredAt: string;
 }
 
+import { useApi } from "~/hooks/useApi";
+
+// ... existing code ...
+
 export default function Alerts() {
   const navigate = useNavigate();
-  const [alerts, setAlerts] = useState<Alert[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/alert/history")
-      .then((res) => {
-        if (res.ok) return res.json();
-        return [];
-      })
-      .then((data) => {
-        setAlerts(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+  const { data, loading } = useApi<Alert[]>("/api/alert/history", {
+    immediate: true,
+  });
+  const alerts = data || [];
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-900">

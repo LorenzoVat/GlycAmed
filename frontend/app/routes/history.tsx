@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useApi } from "~/hooks/useApi";
 import { useNavigate } from "react-router";
 import {
   ArrowLeft,
@@ -34,48 +35,39 @@ interface Consumption {
 
 export default function History() {
   const navigate = useNavigate();
-  const [consumptions, setConsumptions] = useState<Consumption[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+
+  const { data: user } = useApi<any>("/api/user/me", { immediate: true });
+
+  const {
+    data: remoteConsumptions,
+    loading,
+    execute: fetchConsumptions,
+    setData: setConsumptions,
+  } = useApi<Consumption[]>();
+
+  // Ensure consumptions is an array (remoteConsumptions can be null initially)
+  const consumptions = remoteConsumptions || [];
 
   const [productFilter, setProductFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [contributorFilter, setContributorFilter] = useState("");
 
-  useEffect(() => {
-    fetch("/api/user/me")
-      .then((res) => (res.ok ? res.json() : null))
-      .then(setUser)
-      .catch(() => {});
-  }, []);
+  const fetchHistory = () => {
+    const params = new URLSearchParams();
 
-  const fetchHistory = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
+    if (productFilter) params.append("productName", productFilter);
+    if (locationFilter) params.append("location", locationFilter);
 
-      if (productFilter) params.append("productName", productFilter);
-      if (locationFilter) params.append("location", locationFilter);
-
-      if (dateFilter) {
-        const start = new Date(dateFilter);
-        const end = new Date(dateFilter);
-        end.setHours(23, 59, 59);
-        params.append("dateFrom", start.toISOString());
-        params.append("dateTo", end.toISOString());
-      }
-
-      const res = await fetch(`/api/consumption/all?${params.toString()}`);
-      if (res.ok) {
-        const data = await res.json();
-        setConsumptions(data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+    if (dateFilter) {
+      const start = new Date(dateFilter);
+      const end = new Date(dateFilter);
+      end.setHours(23, 59, 59);
+      params.append("dateFrom", start.toISOString());
+      params.append("dateTo", end.toISOString());
     }
+
+    fetchConsumptions(`/api/consumption/all?${params.toString()}`);
   };
 
   useEffect(() => {
@@ -83,7 +75,7 @@ export default function History() {
       fetchHistory();
     }, 300);
     return () => clearTimeout(timer);
-  }, [productFilter, dateFilter, locationFilter]);
+  }, [productFilter, dateFilter, locationFilter]); // Removed fetchHistory from deps to avoid loop if it were unstable, but here it's derived from useApi which is stable-ish. Safest to just depend on filters.
 
   const handleDelete = async (id: string) => {
     if (!confirm("Voulez-vous vraiment supprimer cette entrée ?")) return;
@@ -94,7 +86,7 @@ export default function History() {
       });
 
       if (res.ok) {
-        setConsumptions((prev) => prev.filter((c) => c._id !== id));
+        setConsumptions((prev) => prev?.filter((c) => c._id !== id) || null);
       } else {
         alert("Erreur lors de la suppression");
       }
