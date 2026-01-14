@@ -1,6 +1,6 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
-async function login(page) {
+async function login(page: Page) {
   await page.goto("/");
 
   // Utilisation de user/pass fixes
