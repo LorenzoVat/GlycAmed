@@ -23,7 +23,7 @@ export default defineConfig((config) => ({
     host: "0.0.0.0",
     port: 5173,
     proxy: {
-      "/api": process.env.VITE_API_URL || "http://backend:3000",
+      "/api": "http://backend:3000",
     },
   },
 

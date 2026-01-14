@@ -6,6 +6,11 @@ test.describe("Authentification", () => {
   const email = `test-${Date.now()}@example.com`;
   const password = "Password123!";
 
+  // Ajouter un délai entre chaque test pour éviter les conflits
+  test.afterEach(async ({ page }) => {
+    await page.waitForTimeout(1000);
+  });
+
   // Créer un compte avant de tester le login
   test("Inscription d'un nouvel utilisateur", async ({ page }) => {
     await page.goto("/"); // Le login est sur /
