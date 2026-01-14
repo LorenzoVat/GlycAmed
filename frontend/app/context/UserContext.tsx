@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import * as Sentry from "@sentry/react-router";
 import { useApi } from "~/hooks/useApi";
 
 interface User {
@@ -27,7 +28,19 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     error,
     execute,
     setData,
-    } = useApi<User>("/api/user/me", { credentials: "include" });
+  } = useApi<User>("/api/user/me", { credentials: "include" });
+
+  useEffect(() => {
+    if (user) {
+      Sentry.setUser({
+        id: user._id,
+        email: user.email,
+        username: user.firstName,
+      });
+    } else {
+      Sentry.setUser(null);
+    }
+  }, [user]);
 
   const refreshUser = () => {
     if (!loading) execute();
